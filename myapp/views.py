@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views import View
 
 
 def home(request):
@@ -16,9 +17,17 @@ def hello_world(request):
 
 @csrf_exempt
 def greeting(request):
-    print("Request Method:", request.method)
     if request.method == "POST":
         name = request.POST.get("name", "World")
-        print("Name received:", name)
         return HttpResponse(f"Hello, {name}!")
     return HttpResponse("Send a POST request to get a greeting.")
+
+
+# @csrf_exempt
+# class GreetingView(View):
+#     def get(self, request):
+#         return HttpResponse("This is a class-based view.")
+
+#     def post(self, request):
+#         name = request.POST.get("name", "World")
+#         return HttpResponse(f"Hello, {name} from a class-based view!")
