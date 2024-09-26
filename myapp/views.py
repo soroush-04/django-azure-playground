@@ -14,9 +14,11 @@ def hello_world(request):
     return HttpResponse("Hello, World!")
 
 
-@csrf_exempt  # For simplicity, to disable CSRF validation
+@csrf_exempt
 def greeting(request):
+    print("Request Method:", request.method)
     if request.method == "POST":
         name = request.POST.get("name", "World")
+        print("Name received:", name)
         return HttpResponse(f"Hello, {name}!")
     return HttpResponse("Send a POST request to get a greeting.")
