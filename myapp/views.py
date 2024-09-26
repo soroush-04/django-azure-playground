@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
+from .forms import BookForm
 
 
 def home(request):
@@ -31,3 +32,15 @@ def greeting(request):
 #     def post(self, request):
 #         name = request.POST.get("name", "World")
 #         return HttpResponse(f"Hello, {name} from a class-based view!")
+
+
+def add_book(request):
+    if request.method == "POST":
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("book_list")  # redirect to the book list page
+
+    else:
+        form = BookForm()
+    return render(request, "myapp/add_book.html", {"form": form})
