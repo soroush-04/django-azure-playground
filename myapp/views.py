@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from .forms import BookForm
+from .models import Book
 
 
 def home(request):
@@ -40,7 +41,14 @@ def add_book(request):
         if form.is_valid():
             form.save()
             return redirect("book_list")  # redirect to the book list page
+        else:
+            print(form.errors)
 
     else:
         form = BookForm()
-    return render(request, "myapp/add_book.html", {"form": form})
+    return render(request, "add_book.html", {"form": form})
+
+
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, "book_list.html", {"books": books})
