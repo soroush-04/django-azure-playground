@@ -64,3 +64,11 @@ def edit_book(request, book_id):
     else:
         form = BookForm(instance=book)
     return render(request, "edit_book.html", {"form": form})
+
+
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    if request.method == "POST":
+        book.delete()
+        return redirect("book_list")
+    return render(request, "confirm_delete.html", {"book": book})
