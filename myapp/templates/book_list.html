@@ -9,10 +9,11 @@
 
     <!-- Search Form -->
     <form method="GET" action="{% url 'book_list' %}">
-        <input type="text" name="q" placeholder="Search for a book..." />
+        <input type="text" name="q" placeholder="Search for a book..." value="{{ request.GET.q }}" />
         <button type="submit">Search</button>
+        <button type="button" onclick="clearFilters()">Clear Filters</button>
     </form>
-    
+
     <ul>
         {% for book in books %}
             <li>{{ book.title }} by {{ book.author }} ({{ book.published_date }})</li>
@@ -23,4 +24,13 @@
         {% endfor %}
     </ul>
     <a href="{% url 'add_book' %}">Add a New Book</a>
+    
+    <script>
+        function clearFilters() {
+            console.log("Clear Filters clicked");
+            const searchInput = document.querySelector('input[name="q"]');
+            searchInput.value = '';
+            window.location.href = "{% url 'book_list' %}"; // Redirect to the book list view
+        }
+    </script>
 {% endblock %}
