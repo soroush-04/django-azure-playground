@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from .forms import BookForm
 from .models import Book
+from django.db.models import Q
 
 
 def home(request):
@@ -25,16 +26,6 @@ def greeting(request):
     return HttpResponse("Send a POST request to get a greeting.")
 
 
-# @csrf_exempt
-# class GreetingView(View):
-#     def get(self, request):
-#         return HttpResponse("This is a class-based view.")
-
-#     def post(self, request):
-#         name = request.POST.get("name", "World")
-#         return HttpResponse(f"Hello, {name} from a class-based view!")
-
-
 def add_book(request):
     if request.method == "POST":
         form = BookForm(request.POST)
@@ -49,15 +40,14 @@ def add_book(request):
     return render(request, "add_book.html", {"form": form})
 
 
-# def book_list(request):
-#     books = Book.objects.all()
-#     return render(request, "book_list.html", {"books": books})
-
-
 def book_list(request):
     query = request.GET.get("q")
     if query:
-        books = Book.objects.filter(title__icontains=query)
+        books = Book.objects.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(published_date__icontains=query)
+        )
     else:
         books = Book.objects.all()
 
