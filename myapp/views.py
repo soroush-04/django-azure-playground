@@ -49,8 +49,18 @@ def add_book(request):
     return render(request, "add_book.html", {"form": form})
 
 
+# def book_list(request):
+#     books = Book.objects.all()
+#     return render(request, "book_list.html", {"books": books})
+
+
 def book_list(request):
-    books = Book.objects.all()
+    query = request.GET.get("q")
+    if query:
+        books = Book.objects.filter(title__icontains=query)
+    else:
+        books = Book.objects.all()
+
     return render(request, "book_list.html", {"books": books})
 
 
